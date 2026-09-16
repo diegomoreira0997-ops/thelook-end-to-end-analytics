@@ -13,11 +13,9 @@ Projeto de portfólio de ponta a ponta utilizando o dataset público do **TheLoo
 ---
 
 ## 📂 Estrutura do Repositório
-Os códigos SQL estão organizados de forma modular na pasta `database/`:
-* `bloco1.sql`: Criação das tabelas Fato (`FATO_VENDAS`) e Dimensões (`DIM_PRODUTO`, `DIM_CLIENTE`, `DIM_DATA`), incluindo higienização de nulos e strings (`COALESCE`, `TRIM`, `NULLIF`)[cite: 1].
-* `bloco2.sql`: Resolução dos desafios de 1 a 15 (usuários, status de pedidos, receitas por categoria e marcas)[cite: 2].
-* `bloco3.sql`: Resolução dos desafios de 16 a 25 (evolução mensal de receita, KPIs, estados, clientes órfãos e top produtos)[cite: 3].
-* `bloco4.sql`: Pipeline consolidadinho (Script Mestre) para execução de ponta a ponta[cite: 4].
+Os códigos SQL e os ativos visuais estão organizados nas seguintes pastas:
+* `database/`: Contém os scripts modulares (`bloco1.sql` a `bloco4.sql`) com a criação de tabelas, tratamentos de nulos e os 25 desafios de negócio resolvidos[cite: 1, 2, 3, 4].
+* `screenshots/`: Contém os prints das telas do dashboard interativo de BI.
 
 ---
 
@@ -27,7 +25,7 @@ O dashboard foi estruturado em abas estratégicas para responder às principais 
 
 ### 1️⃣ Página 01: Visão Geral de Vendas e Desempenho Temporal
 * **Print do Dashboard:** 
-  ![Dashboard Visão Geral](images/pagina1_visao_geral.png)
+  ![Dashboard Visão Geral](screenshots/pagina1_visao_geral.png)
 * **Perguntas de Negócio Respondidas:**
   * Qual é a receita total gerada ($10,8 Mi), o volume de clientes (80 Mil), de pedidos (125 Mil) e o ticket médio ($86,49)? *(Respondido via Desafios #2, #6 e #11)*
   * Como a receita se divide por departamento (Men vs Women) e quais são as categorias de vestuário mais rentáveis? *(Respondido via Desafios #8 e #18)*
@@ -35,7 +33,7 @@ O dashboard foi estruturado em abas estratégicas para responder às principais 
 
 ### 2️⃣ Página 02: Performance de Produtos, Categorias e Marcas
 * **Print do Dashboard:** 
-  ![Dashboard Produtos](images/pagina2_produtos.png)
+  ![Dashboard Produtos](screenshots/pagina2_produtos.png)
 * **Perguntas de Negócio Respondidas:**
   * Quais são os produtos individuais e as marcas que mais geram receita para a plataforma (ex: Diesel, Calvin Klein)? *(Respondido via Desafios #13 e #14)*
   * Qual é o volume total de itens vendidos e o ranqueamento detalhado das categorias por faturamento? *(Respondido via Desafio #12)*
@@ -43,7 +41,7 @@ O dashboard foi estruturado em abas estratégicas para responder às principais 
 
 ### 3️⃣ Página 03: Comportamento de Clientes e Geografia
 * **Print do Dashboard:** 
-  ![Dashboard Clientes](images/pagina3_clientes.png)
+  ![Dashboard Clientes](screenshots/pagina3_clientes.png)
 * **Perguntas de Negócio Respondidas:**
   * Quais regiões, estados (ex: Guangdong, England, California, São Paulo) e cidades concentram o maior número de clientes e o topo do faturamento? *(Respondido via Desafios #20 e #21)*
   * Como os pedidos se comportam geograficamente de forma detalhada por estado e cidade? *(Respondido via Desafio #21)*
@@ -66,4 +64,4 @@ Durante a exploração da camada geográfica do dataset público do *TheLook E-c
 3. Conecte a sua ferramenta de BI nas tabelas geradas no BigQuery (`thelook_bi`) para explorar o dashboard interativo.
 
 ---
-*Desenvolvido por **[Seu Nome]**.*
+*Desenvolvido por **Diego Moreira**.*
