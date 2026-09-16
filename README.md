@@ -14,7 +14,7 @@ Projeto de portfólio de ponta a ponta utilizando o dataset público do **TheLoo
 
 ## 📂 Estrutura do Repositório
 Os códigos SQL e os ativos visuais estão organizados nas seguintes pastas:
-* `database/`: Contém os scripts modulares (`bloco1.sql` a `bloco4.sql`) com a criação de tabelas, tratamentos de nulos e os 25 desafios de negócio resolvidos[cite: 1, 2, 3, 4].
+* `database/`: Contém os scripts modulares (`bloco1.sql` a `bloco4.sql`) com a criação de tabelas, tratamentos de nulos e os 25 desafios de negócio resolvidos.
 * `screenshots/`: Contém os prints das telas do dashboard interativo de BI.
 
 ---
@@ -24,24 +24,30 @@ Os códigos SQL e os ativos visuais estão organizados nas seguintes pastas:
 O dashboard foi estruturado em abas estratégicas para responder às principais perguntas de negócio da diretoria, conectando a engenharia de dados diretamente à tomada de decisão visual.
 
 ### 1️⃣ Página 01: Visão Geral de Vendas e Desempenho Temporal
-* **Print do Dashboard:** 
+* **Print do Dashboard:**
+  
   ![Dashboard Visão Geral](screenshots/pagina1_visao_geral.png)
+
 * **Perguntas de Negócio Respondidas:**
   * Qual é a receita total gerada ($10,8 Mi), o volume de clientes (80 Mil), de pedidos (125 Mil) e o ticket médio ($86,49)? *(Respondido via Desafios #2, #6 e #11)*
   * Como a receita se divide por departamento (Men vs Women) e quais são as categorias de vestuário mais rentáveis? *(Respondido via Desafios #8 e #18)*
   * Qual é a tendência de evolução mensal da receita ao longo dos anos? *(Respondido via Desafio #16 e #17)*
 
 ### 2️⃣ Página 02: Performance de Produtos, Categorias e Marcas
-* **Print do Dashboard:** 
+* **Print do Dashboard:**
+  
   ![Dashboard Produtos](screenshots/pagina2_produtos.png)
+
 * **Perguntas de Negócio Respondidas:**
   * Quais são os produtos individuais e as marcas que mais geram receita para a plataforma (ex: Diesel, Calvin Klein)? *(Respondido via Desafios #13 e #14)*
   * Qual é o volume total de itens vendidos e o ranqueamento detalhado das categorias por faturamento? *(Respondido via Desafio #12)*
   * Como fica a tabela detalhada de produtos em relação à categoria e marca correspondente? *(Respondido via Desafio #19)*
 
 ### 3️⃣ Página 03: Comportamento de Clientes e Geografia
-* **Print do Dashboard:** 
+* **Print do Dashboard:**
+  
   ![Dashboard Clientes](screenshots/pagina3_clientes.png)
+
 * **Perguntas de Negócio Respondidas:**
   * Quais regiões, estados (ex: Guangdong, England, California, São Paulo) e cidades concentram o maior número de clientes e o topo do faturamento? *(Respondido via Desafios #20 e #21)*
   * Como os pedidos se comportam geograficamente de forma detalhada por estado e cidade? *(Respondido via Desafio #21)*
