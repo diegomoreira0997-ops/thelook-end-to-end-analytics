@@ -1,73 +1,453 @@
-# 🛍️ TheLook E-commerce: End-to-End Data Pipeline & Analytics
+# TheLook E-commerce — End-to-End Analytics
 
-Projeto de portfólio de ponta a ponta utilizando o dataset público do **TheLook E-commerce** hospedado no **Google BigQuery**. O projeto abrange desde a modelagem dimensional e tratamento de qualidade de dados (Engenharia de Dados via SQL) até a análise exploratória de negócios e visualização em Dashboard interativo de BI.
+Projeto de Data Analytics desenvolvido utilizando **BigQuery, SQL, modelagem dimensional, DAX e Power BI**, com o objetivo de transformar dados públicos de e-commerce em uma solução analítica completa.
 
----
-
-## 🛠️ Arquitetura e Tecnologias
-* **Armazenamento & Processamento:** Google BigQuery (SQL)
-* **Controle de Versão:** Git & GitHub (VS Code)
-* **Visualização de Dados (BI):** Power BI / Tableau
-* **Linguagem:** SQL (ANSI / BigQuery Dialect)
+O projeto parte dos dados públicos do **TheLook E-commerce**, realiza análises exploratórias em SQL, constrói um modelo dimensional no BigQuery e utiliza o Power BI para criação de dashboards interativos e análise de indicadores de negócio.
 
 ---
 
-## 📂 Estrutura do Repositório
-Os códigos SQL e os ativos visuais estão organizados nas seguintes pastas:
-* `database/`: Contém os scripts modulares (`bloco1.sql` a `bloco4.sql`) com a criação de tabelas, tratamentos de nulos e os 25 desafios de negócio resolvidos.
-* `screenshots/`: Contém os prints das telas do dashboard interativo de BI.
+## 📊 Visão geral
+
+O projeto foi desenvolvido seguindo um fluxo de análise de dados de ponta a ponta:
+
+**Dados públicos → SQL → BigQuery → Modelagem → DAX → Power BI → Dashboard → Insights**
+
+### Principais indicadores
+
+| Indicador | Resultado |
+|---|---:|
+| Receita Total | $10,8 Mi |
+| Clientes | 80 mil |
+| Pedidos | 125 mil |
+| Ticket Médio | $86,46 |
 
 ---
 
-## 📊 Business Intelligence & Perguntas de Negócio Respondidas
+## 🎯 Objetivo do projeto
 
-O dashboard foi estruturado em abas estratégicas para responder às principais perguntas de negócio da diretoria, conectando a engenharia de dados diretamente à tomada de decisão visual.
+O objetivo é analisar o desempenho de um negócio de e-commerce através de diferentes perspectivas:
 
-### 1️⃣ Página 01: Visão Geral de Vendas e Desempenho Temporal
-* **Print do Dashboard:**
-  
-  ![Dashboard Visão Geral](screenshots/pagina1_visao_geral.png)
+- Receita
+- Pedidos
+- Clientes
+- Ticket médio
+- Produtos
+- Categorias
+- Marcas
+- Departamentos
+- Desempenho regional
+- Evolução da receita ao longo do tempo
 
-* **Perguntas de Negócio Respondidas:**
-  * Qual é a receita total gerada ($10,8 Mi), o volume de clientes (80 Mil), de pedidos (125 Mil) e o ticket médio ($86,49)? *(Respondido via Desafios #2, #6 e #11)*
-  * Como a receita se divide por departamento (Men vs Women) e quais são as categorias de vestuário mais rentáveis? *(Respondido via Desafios #8 e #18)*
-  * Qual é a tendência de evolução mensal da receita ao longo dos anos? *(Respondido via Desafio #16 e #17)*
-
-### 2️⃣ Página 02: Performance de Produtos, Categorias e Marcas
-* **Print do Dashboard:**
-  
-  ![Dashboard Produtos](screenshots/pagina2_produtos.png)
-
-* **Perguntas de Negócio Respondidas:**
-  * Quais são os produtos individuais e as marcas que mais geram receita para a plataforma (ex: Diesel, Calvin Klein)? *(Respondido via Desafios #13 e #14)*
-  * Qual é o volume total de itens vendidos e o ranqueamento detalhado das categorias por faturamento? *(Respondido via Desafio #12)*
-  * Como fica a tabela detalhada de produtos em relação à categoria e marca correspondente? *(Respondido via Desafio #19)*
-
-### 3️⃣ Página 03: Comportamento de Clientes e Geografia
-* **Print do Dashboard:**
-  
-  ![Dashboard Clientes](screenshots/pagina3_clientes.png)
-
-* **Perguntas de Negócio Respondidas:**
-  * Quais regiões, estados (ex: Guangdong, England, California, São Paulo) e cidades concentram o maior número de clientes e o topo do faturamento? *(Respondido via Desafios #20 e #21)*
-  * Como os pedidos se comportam geograficamente de forma detalhada por estado e cidade? *(Respondido via Desafio #21)*
-  * Qual é o panorama geral da base de clientes ativos frente aos indicadores globais da empresa? *(Respondido via Desafio #1 e #22)*
+A análise busca transformar dados transacionais em informações que possam apoiar a compreensão do desempenho comercial.
 
 ---
 
-## ⚠️ Nota de Engenharia & Governança de Dados (Desafios de Renderização CJK)
+# 🗂️ Arquitetura do projeto
 
-Durante a exploração da camada geográfica do dataset público do *TheLook E-commerce*, identificou-se uma idiosyncrasia técnica comum em ambientes de grande escala: **metadados e nomes geográficos nativos em caracteres multibyte (CJK - Chinês, Japonês e Coreano)** que sofrem de conflitos de *encoding/collation mismatch* ao serem renderizados por fontes e motores de visualização ocidentais padrão (como verificado nas tabelas detalhadas da aba de geografia).
+O projeto foi estruturado utilizando uma abordagem dimensional, com uma tabela fato central e dimensões relacionadas.
 
-* **Decisão Técnica (Gestão de Risco):** Em vez de aplicar *hardcodes* ou transformações destrutivas na camada de dados que pudessem comprometer a integridade de métricas geográficas cruzadas, optou-se por preservar a fidedignidade estrutural original do pipeline do BigQuery.
-* **Impacto e Garantia:** Os agregados numéricos globais e regionais (**Receita, Volume de Pedidos e Ticket Médio**) mantêm-se matematicamente rigorosos, auditados e perfeitamente íntegros para a tomada de decisão executiva.
+```text
+                     DIM_PRODUTO
+                          │
+                          │
+                          ▼
+DIM_CLIENTE ───────── FATO_VENDAS ───────── DIM_DATA
+```
+
+### FATO_VENDAS
+
+A tabela fato representa o nível transacional do projeto.
+
+**Granularidade:**
+
+> 1 linha = 1 item vendido.
+
+Principais campos:
+
+```text
+order_item_id
+order_id
+product_id
+user_id
+created_at
+sale_date
+sale_price
+```
+
+A tabela foi construída a partir das tabelas `orders` e `order_items` do dataset público.
 
 ---
 
-## 🚀 Como Executar o Projeto
-1. Acesse o seu ambiente no **Google BigQuery**.
-2. Execute os scripts na ordem numérica presente na pasta `database/` para criar o seu dataset e as tabelas dimensionais tratadas.
-3. Conecte a sua ferramenta de BI nas tabelas geradas no BigQuery (`thelook_bi`) para explorar o dashboard interativo.
+## 📦 Dimensões
+
+### DIM_PRODUTO
+
+Contém informações relacionadas aos produtos:
+
+```text
+product_id
+product_name
+category
+brand
+department
+retail_price
+cost
+sku
+```
+
+### DIM_CLIENTE
+
+Contém informações relacionadas aos clientes:
+
+```text
+user_id
+first_name
+last_name
+gender
+age
+city
+state
+country
+```
+
+### DIM_DATA
+
+Dimensão utilizada para análises temporais:
+
+```text
+date
+ano
+ano_mes
+dia
+mes_nome
+mes_numero
+trimestre
+```
 
 ---
-*Desenvolvido por **Diego Moreira**.*
+
+# 🛢️ BigQuery
+
+O projeto utiliza o dataset público:
+
+```text
+bigquery-public-data.thelook_ecommerce
+```
+
+Foi criado um dataset próprio no BigQuery:
+
+```text
+thelook_bi
+```
+
+A partir dos dados públicos foram construídas as estruturas utilizadas na análise.
+
+---
+
+# 💻 SQL
+
+As análises SQL foram desenvolvidas progressivamente, começando por consultas básicas e evoluindo para análises de negócio.
+
+Os exercícios e consultas estão organizados na pasta:
+
+```text
+database/
+├── bloco1.sql
+├── bloco2.sql
+├── bloco3.sql
+└── bloco4.sql
+```
+
+Entre as análises realizadas estão:
+
+- Contagem de clientes
+- Contagem de pedidos
+- Receita total
+- Ticket médio
+- Receita mensal
+- Receita por departamento
+- Receita por categoria
+- Receita por marca
+- Receita por produto
+- Clientes por região
+- Receita por região
+- Clientes sem pedidos
+- Produtos nunca vendidos
+- Ranking de produtos
+- KPIs mensais
+
+---
+
+# 📐 Modelagem e DAX
+
+Após a etapa de SQL, os dados foram organizados em um modelo dimensional para utilização no Power BI.
+
+As principais métricas utilizadas incluem:
+
+### Receita Total
+
+```DAX
+Receita Total =
+SUM(FATO_VENDAS[sale_price])
+```
+
+### Pedidos
+
+```DAX
+Pedidos =
+DISTINCTCOUNT(FATO_VENDAS[order_id])
+```
+
+### Clientes
+
+```DAX
+Clientes =
+DISTINCTCOUNT(FATO_VENDAS[user_id])
+```
+
+### Ticket Médio
+
+```DAX
+Ticket Médio =
+DIVIDE(
+    [Receita Total],
+    [Pedidos]
+)
+```
+
+---
+
+# 📊 Dashboard
+
+O dashboard foi desenvolvido no Power BI e está dividido em três páginas principais.
+
+## 1. Visão Geral
+
+A página apresenta uma visão executiva do desempenho do e-commerce.
+
+Principais análises:
+
+- Receita total
+- Clientes
+- Pedidos
+- Ticket médio
+- Evolução mensal da receita
+- Receita por departamento
+- Receita por categoria
+
+![Visão Geral](screenshots/pagina1_visao_geral.png)
+
+---
+
+## 2. Produtos & Vendas
+
+Página dedicada à análise do desempenho dos produtos.
+
+Principais análises:
+
+- Receita por categoria
+- Receita por produto
+- Receita por marca
+- Itens vendidos
+- Ticket médio
+- Receita total
+- Detalhamento dos produtos
+
+![Produtos & Vendas](screenshots/pagina2_produtos.png)
+
+---
+
+## 3. Performance Regional
+
+Página dedicada à análise geográfica dos clientes e das vendas.
+
+Principais análises:
+
+- Clientes por região
+- Receita por região
+- Quantidade de pedidos
+- Receita total
+- Distribuição geográfica dos clientes
+
+![Performance Regional](screenshots/pagina3_clientes.png)
+
+> Como o dataset possui dados de diferentes países, os campos geográficos podem representar estados, províncias ou outras divisões administrativas dependendo do país.
+
+---
+
+# 🔎 Perguntas de negócio
+
+O projeto foi desenvolvido para responder perguntas como:
+
+### Receita
+
+- Qual é a receita total?
+- Como a receita evolui ao longo do tempo?
+- Quais departamentos geram mais receita?
+- Quais categorias possuem maior receita?
+
+### Produtos
+
+- Quais produtos geram mais receita?
+- Quais marcas apresentam maior receita?
+- Quais categorias possuem maior volume de vendas?
+- Existem produtos cadastrados que nunca foram vendidos?
+
+### Clientes
+
+- Quantos clientes existem?
+- Quantos clientes realizaram pedidos?
+- Existem clientes cadastrados sem pedidos?
+- Como os clientes estão distribuídos geograficamente?
+
+### Regional
+
+- Quais regiões concentram mais clientes?
+- Quais regiões geram mais receita?
+- Como os pedidos estão distribuídos regionalmente?
+
+---
+
+# 💡 Principais resultados
+
+A análise consolidada apresentou aproximadamente:
+
+- **$10,8 milhões em receita**
+- **125 mil pedidos**
+- **80 mil clientes**
+- **$86,46 de ticket médio**
+
+O dashboard permite explorar esses indicadores por diferentes dimensões, incluindo tempo, produto, categoria, marca, departamento e região.
+
+> Os valores apresentados são referentes ao conjunto de dados analisado no projeto e não representam necessariamente resultados financeiros reais de uma empresa.
+
+---
+
+# 🛠️ Tecnologias utilizadas
+
+- **Google BigQuery** — armazenamento, consulta e transformação dos dados
+- **SQL** — exploração e análise dos dados
+- **Modelagem dimensional** — organização do modelo analítico
+- **Power BI** — visualização e criação dos dashboards
+- **DAX** — criação das métricas e indicadores
+- **GitHub** — versionamento e documentação do projeto
+
+---
+
+# 📁 Estrutura do repositório
+
+```text
+thelook-end-to-end-analytics/
+│
+├── database/
+│   ├── bloco1.sql
+│   ├── bloco2.sql
+│   ├── bloco3.sql
+│   └── bloco4.sql
+│
+├── screenshots/
+│   ├── pagina1_visao_geral
+│   ├── pagina2_produtos
+│   └── pagina3_clientes
+│
+├── THELOOK_ECOMMERCE.pbix
+│
+└── README.md
+```
+
+---
+
+# ▶️ Como reproduzir o projeto
+
+### 1. BigQuery
+
+Utilize o dataset público:
+
+```text
+bigquery-public-data.thelook_ecommerce
+```
+
+Crie um dataset para as tabelas analíticas:
+
+```text
+thelook_bi
+```
+
+### 2. SQL
+
+Execute os scripts disponíveis na pasta:
+
+```text
+database/
+```
+
+### 3. Power BI
+
+Conecte o Power BI às tabelas criadas no BigQuery.
+
+O modelo deve seguir a estrutura:
+
+```text
+DIM_CLIENTE
+       │
+       ▼
+FATO_VENDAS
+       ▲
+       │
+DIM_PRODUTO
+
+DIM_DATA
+       │
+       ▼
+FATO_VENDAS
+```
+
+### 4. Dashboard
+
+Abra o arquivo:
+
+```text
+THELOOK_ECOMMERCE.pbix
+```
+
+e utilize as três páginas disponíveis:
+
+```text
+Visão Geral
+Produtos & Vendas
+Performance Regional
+```
+
+---
+
+# ⚠️ Limitações dos dados
+
+Este projeto utiliza um dataset público de e-commerce para fins de estudo e portfólio.
+
+Portanto:
+
+- Os dados não representam necessariamente uma empresa real.
+- Os resultados financeiros são analíticos e não devem ser interpretados como demonstrações contábeis.
+- Informações geográficas podem possuir diferentes nomenclaturas administrativas dependendo do país.
+- O ticket médio e demais indicadores dependem do período e dos registros presentes no dataset analisado.
+
+---
+
+# 🚀 Próximos passos
+
+Possíveis evoluções do projeto:
+
+- Publicação do dashboard no Power BI
+- Inclusão de análises de margem e lucro estimado
+- Análise de comportamento dos clientes
+- Análise de retenção e recorrência
+- Criação de indicadores adicionais em DAX
+- Evolução da documentação e automação das consultas
+
+---
+
+## 👤 Autor
+
+**Diego Moreira**
+
+Projeto desenvolvido como parte do meu portfólio de **Data Analytics / Business Intelligence**.
